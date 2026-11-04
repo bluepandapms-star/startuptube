@@ -2,7 +2,7 @@
 
 **The startup videos founders actually recommend.** → [startuptube.pages.dev](https://startuptube.pages.dev)
 
-StartupTube is an open-source, community-driven library of 1,200+ free startup talks on YouTube — on ideas, customers, sales, business psychology, fundraising and founder stories. Every video comes with a short note on why people recommend it.
+StartupTube is an open-source, community-driven library of 1,000+ free startup talks on YouTube — on ideas, customers, sales, business psychology, fundraising and founder stories. Every video comes with a short note on why people recommend it.
 
 - No account, no algorithm, no clickbait
 - Learn by Journey: Idea → Validation → MVP → First Customer → Growth → Fundraising
@@ -19,7 +19,9 @@ StartupTube is an independent project and is not affiliated with YouTube, Y Comb
 
 - **Hand-picked StartupTube videos** — curated with a note on why each is worth watching.
 - **The Stanford × Y Combinator "How to Start a Startup" course** (2014).
-- **The HackerTube dataset** ([hackertube.org/data](https://hackertube.org/data), export 2026-10-31), derived from [open-index/hacker-news](https://huggingface.co/datasets/open-index/hacker-news): videos that Hacker News commenters recommended again and again, filtered to startup, business, technology-industry and psychology topics. Used under **ODC-By 1.0** — this credit must stay with the data.
+- **Y Combinator talks** — around 590 talks from YC's channel, with notes from [yc-base](https://github.com/MrFishPL/yc-base) (MIT).
+- **Lenny's Podcast** — around 265 episodes on product, growth and startups (episode list from [ChatPRD/lennys-podcast-transcripts](https://github.com/ChatPRD/lennys-podcast-transcripts)).
+- **The HackerTube dataset** ([hackertube.org/data](https://hackertube.org/data), export 2026-10-31), derived from [open-index/hacker-news](https://huggingface.co/datasets/open-index/hacker-news): videos that Hacker News commenters recommended again and again, hand-filtered to about 115 startup and founder videos. Used under **ODC-By 1.0** — this credit must stay with the data.
 
 ## Suggest a video
 

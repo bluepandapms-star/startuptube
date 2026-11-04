@@ -68,7 +68,7 @@ const page = ({ title, desc, url, image, body }) => `<!doctype html>
 <style>${css}</style></head><body>
 <header><div class="bar"><a class="logo" href="/">${logo}<span>Startup<b>Tube</b></span></a><a class="cta" href="/">Browse all ${VIDEOS.length.toLocaleString("en-US")} talks</a></div></header>
 <main>${body}</main>
-<footer>StartupTube is an open-source, community-driven library of the startup talks founders recommend most. Every video plays through YouTube's official embedded player and belongs to its creator. Includes data from <a href="https://hackertube.org/data">HackerTube</a> and <a href="https://huggingface.co/datasets/open-index/hacker-news">open-index/hacker-news</a> (ODC-By 1.0). <a href="https://github.com/bluepandapms-star/startuptube">Source on GitHub</a>.</footer>
+<footer>StartupTube is an open-source, community-driven library of the startup talks founders recommend most. Every video plays through YouTube's official embedded player and belongs to its creator. Includes data from <a href="https://hackertube.org/data">HackerTube</a> and <a href="https://huggingface.co/datasets/open-index/hacker-news">open-index/hacker-news</a> (ODC-By 1.0). Y Combinator talk notes from <a href="https://github.com/MrFishPL/yc-base">yc-base</a> (MIT). <a href="https://github.com/bluepandapms-star/startuptube">Source on GitHub</a>.</footer>
 </body></html>`;
 const thumb = id => `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
 const item = v => `<li><a href="/v/${v.id}.html"><img loading="lazy" src="${thumb(v.id)}" alt=""><strong>${esc(v.title)}</strong><span>${esc(v.channel)}</span></a></li>`;
