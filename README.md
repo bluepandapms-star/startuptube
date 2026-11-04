@@ -49,7 +49,9 @@ All videos live in `videos.js`. Add hand-picked videos to the first `VIDEOS` lis
 
 ## Run it locally
 
-No build step: `index.html` plus `videos.js`. Open `index.html` in a browser, or serve the folder with any static server.
+The app is `index.html` plus `videos.js`. Open `index.html` in a browser, or serve the folder with any static server.
+
+After changing `videos.js`, run `node scripts/build-pages.mjs` to rebuild the per-video pages (`v/`), category pages (`c/`) and `sitemap.xml` that search engines use.
 
 ## Licence
 

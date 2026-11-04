@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://startuptube.pages.dev/sitemap.xml
