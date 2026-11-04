@@ -251,6 +251,8 @@
     <div class="actions">
       <button class="btn" id="dLike">👍 Like</button>
       <button class="btn" id="dLater">🕒 Watch later</button>
+      <button class="btn" id="dShareX">Share on X</button>
+      <button class="btn" id="dCopy">Copy link</button>
       <a class="btn" id="dYT" target="_blank" rel="noopener">Open on YouTube ↗</a>
       <button class="btn red" id="dClose">Close</button>
     </div>
@@ -525,6 +527,7 @@ function go(v){ shown = PAGE; view = v; if(v !== "home") topic = "All"; document
 
 /* ---------- player ---------- */
 let current = null;
+const videoLink = v => location.origin + location.pathname + "#v=" + v.id;
 function syncButtons(){
   $("#dLike").classList.toggle("on", liked.includes(current.id));
   $("#dLater").classList.toggle("on", later.includes(current.id));
@@ -539,6 +542,9 @@ function openVideo(id){
   $("#dMeta").textContent = [v.channel, v.minutes ? `${v.minutes} min` : "", v.year].filter(Boolean).join(" · ");
   $("#dWhy").textContent = v.why;
   $("#dYT").href = `https://www.youtube.com/watch?v=${v.id}`;
+  $("#dCopy").textContent = "Copy link";
+  try { window.history.replaceState(null, "", "#v=" + v.id); } catch(e){}
+  document.title = v.title + " — StartupTube";
   syncButtons();
   $("#dlg").showModal();
 }
@@ -572,12 +578,34 @@ $("#main").addEventListener("keydown", e => { if(e.key === "Enter"){ const c = e
 $("#dLike").onclick = () => toggle(liked, "liked");
 $("#dLater").onclick = () => toggle(later, "later");
 $("#dClose").onclick = () => $("#dlg").close();
-$("#dlg").addEventListener("close", () => { $("#player").innerHTML = ""; render(); });
+$("#dlg").addEventListener("close", () => {
+  $("#player").innerHTML = "";
+  try { window.history.replaceState(null, "", location.pathname); } catch(e){}
+  document.title = "StartupTube — Startup videos founders actually recommend";
+  render();
+});
+$("#dShareX").onclick = () => {
+  if(!current) return;
+  const text = `"${current.title}" — worth watching for founders. Found it on StartupTube:`;
+  window.open("https://x.com/intent/post?text=" + encodeURIComponent(text) + "&url=" + encodeURIComponent(videoLink(current)), "_blank", "noopener");
+};
+$("#dCopy").onclick = async () => {
+  if(!current) return;
+  const link = videoLink(current);
+  try { await navigator.clipboard.writeText(link); $("#dCopy").textContent = "Link copied ✓"; }
+  catch(e){ window.prompt("Copy this link:", link); }
+};
+function openFromHash(){
+  const m = location.hash.match(/^#v=([A-Za-z0-9_-]{11})$/);
+  if(m && byId(m[1]) && !$("#dlg").open) openVideo(m[1]);
+}
+window.addEventListener("hashchange", openFromHash);
 $("#helpBtn").onclick = () => $("#help").showModal();
 $("#helpClose").onclick = () => $("#help").close();
 $("#repoLink").href = REPO_URL;
 
 render();
+openFromHash();
 </script>
 </body>
 </html>
