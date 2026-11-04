@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>StartupTube — Startup videos founders actually recommend</title>
-<meta name="description" content="An open-source, community-driven library of the startup talks founders recommend most — ideas, customers, sales, psychology and fundraising. Played through YouTube's official embeds.">
+<meta name="description" content="An open-source, community-driven library of 1,200+ startup talks founders recommend most — ideas, customers, sales, psychology and fundraising. Played through YouTube's official embeds.">
 <meta property="og:title" content="StartupTube — Startup videos founders actually recommend">
 <meta property="og:description" content="A hand-picked library of the startup videos founders keep recommending.">
 <meta property="og:type" content="website">
@@ -133,11 +133,15 @@
   .fbtn.on{background:var(--navy);border-color:var(--navy);color:var(--bg)}
   .fclear{border:0;background:none;color:var(--accent);cursor:pointer;font-weight:600;font-size:14px}
   .fpanel{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px 28px;padding:18px 20px;margin-bottom:18px;background:var(--surface);border:1px solid var(--line);border-radius:18px}
+  .fcol{max-height:320px;overflow-y:auto}
   .fcol h5{margin:0 0 8px;padding-bottom:8px;border-bottom:1px solid var(--line);font-size:14px;font-weight:600;color:var(--text)}
   .fopt{display:block;border:0;background:none;padding:6px 0;cursor:pointer;color:var(--muted);font-size:14px;text-align:left}
   .fopt:hover{color:var(--text)}
   .fopt.on{color:var(--accent);font-weight:600}
   .fopt.on:before{content:"✓ "}
+
+  .more{display:flex;align-items:center;gap:14px;justify-content:center;margin:36px 0 8px;color:var(--muted);font-size:14px}
+  .more .btn{padding:11px 22px}
 
   /* settings */
   .panel{max-width:560px;display:flex;flex-direction:column;gap:14px}
@@ -146,16 +150,16 @@
   .panel p{margin:0 0 12px;color:var(--muted);font-size:14px}
 
   /* player dialog */
-  dialog{border:0;border-radius:22px;padding:0;width:min(1000px,94vw);background:var(--surface);color:var(--text);overflow:hidden}
+  dialog{border:0;border-radius:22px;padding:0;width:min(960px,94vw,calc((88vh - 190px) * 16 / 9));max-height:94vh;background:var(--surface);color:var(--text);overflow:hidden auto}
   dialog::backdrop{background:rgba(9,14,28,.78);backdrop-filter:blur(3px)}
   dialog[open]{animation:pop .22s ease-out}
   @keyframes pop{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
   .player{aspect-ratio:16/9;background:#000}
   .player iframe{width:100%;height:100%;border:0;display:block}
-  .dbody{padding:20px 24px 24px}
-  .dbody h2{margin:0 0 6px;font-family:var(--display);font-size:24px;letter-spacing:-.02em;line-height:1.2}
+  .dbody{padding:16px 22px 20px}
+  .dbody h2{margin:0 0 4px;font-family:var(--display);font-size:21px;letter-spacing:-.02em;line-height:1.2}
   .dmeta{color:var(--muted);font-size:14px;margin-bottom:14px}
-  .why{border-left:3px solid var(--accent);background:var(--bg);border-radius:0 14px 14px 0;padding:12px 16px;font-size:15px;line-height:1.55;margin-bottom:18px}
+  .why{border-left:3px solid var(--accent);background:var(--bg);border-radius:0 14px 14px 0;padding:10px 14px;font-size:14px;line-height:1.5;margin-bottom:14px;max-height:7.5em;overflow:auto}
   .why b{display:block;margin-bottom:3px;font-size:13px;color:var(--accent)}
   .actions{display:flex;gap:8px;flex-wrap:wrap}
   .btn{border:1px solid var(--line);background:var(--surface);padding:9px 16px;border-radius:12px;cursor:pointer;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:6px}
@@ -181,7 +185,9 @@
     .page-title{font-size:25px}
     .btn.red{margin-left:0}
   }
+  #help{width:min(640px,94vw)}
   @media (max-width:640px){
+    dialog{width:100vw;max-width:100vw;max-height:100vh;border-radius:0;margin:auto 0 0}
     header{flex-wrap:wrap;height:auto;padding:10px 12px;row-gap:8px}
     .search{order:5;flex:1 0 100%;max-width:none;margin:0}
     .logo{margin-right:auto}
@@ -245,11 +251,12 @@
     <p>StartupTube is an open-source, community-driven library of the startup talks founders recommend most — on ideas, customers, sales, business psychology and fundraising. Every video is hand-picked, with a short note on why it's worth your time.</p>
     <p>No account, no algorithm, no clickbait. Your likes, history and watch-later list stay in your own browser.</p>
     <p>Every video plays through YouTube's official embedded player and follows YouTube's Terms of Service. StartupTube doesn't host, download or edit any video; views count toward the original creator's channel. It's an independent project, not affiliated with YouTube, Y Combinator, Stanford or any speaker.</p>
-    <p>The code and the video list are open on GitHub. Know a talk every founder should watch? Suggest it there and the community can review it.</p>
+    <p>Most of the library comes from the open HackerTube dataset (hackertube.org/data, ODC-By 1.0) — videos that Hacker News commenters recommended again and again — filtered to startup, business and psychology topics. The code and the video list are open on GitHub. Know a talk every founder should watch? Suggest it there and the community can review it.</p>
     <div class="actions"><a class="btn" id="repoLink" target="_blank" rel="noopener">View source on GitHub</a><button class="btn red" id="helpClose">Got it</button></div>
   </div>
 </dialog>
 
+<script src="videos.js"></script>
 <script>
 /* ==================================================================
    VIDEO LIST — to add a video, copy one block and change it.
@@ -265,99 +272,7 @@
    also:    extra categories this video also belongs to (optional)
    why:     one line on why founders should watch it
    ================================================================== */
-const VIDEOS = [
-  /* ---------- 🚀 Startup & Entrepreneurship ---------- */
-  { id: "CBYhVcO4WgI", type: "Lecture", india: false, title: "How to Start a Startup — Lecture 1", channel: "Sam Altman & Dustin Moskovitz · Stanford CS183B", minutes: 44, year: 2014,
-    category: "Startup & Entrepreneurship", topics: ["Ideas", "Team"], stage: "Idea", gem: false,
-    why: "The classic opener: idea, product, team and execution all matter — and ideas that sound bad are often the good ones." },
-  { id: "3fZNGwl7Lsg", also: ["Business Psychology"], type: "Lecture", india: false, title: "Before the Startup", channel: "Paul Graham · Stanford CS183B", minutes: null, year: 2014,
-    category: "Startup & Entrepreneurship", topics: ["Ideas"], stage: "Idea", gem: false,
-    why: "YC's founder on the counterintuitive truths of startups and why the best ideas come from noticing problems in your own life." },
-  { id: "Th8JoIan4dg", type: "Talk", india: false, title: "How to Get and Evaluate Startup Ideas", channel: "Jared Friedman · Y Combinator Startup School", minutes: null, year: null,
-    category: "Startup & Entrepreneurship", topics: ["Ideas"], stage: "Idea", gem: false,
-    why: "A practical checklist for judging an idea — and the common traps first-time founders fall into." },
-  { id: "MT4Ig2uqjTc", also: ["Customer Behaviour"], type: "Talk", india: false, title: "How to Talk to Users", channel: "Eric Migicovsky · Y Combinator", minutes: 32, year: 2019,
-    category: "Startup & Entrepreneurship", topics: ["Users", "Product"], stage: "Validation", gem: false,
-    why: "A repeatable way to interview customers: ask about real past behaviour, not hypotheticals, and never pitch." },
-  { id: "0LNQxT9LvM0", also: ["Customer Behaviour"], type: "Talk", india: false, title: "How to Find Product Market Fit", channel: "David Rusenko · Y Combinator", minutes: null, year: null,
-    category: "Startup & Entrepreneurship", topics: ["Product", "Users"], stage: "Validation", gem: false,
-    why: "What product-market fit actually feels like from the inside, from the founder of Weebly." },
-  { id: "yc1Uwhfxacs", also: ["Customer Behaviour"], type: "Podcast", india: false, title: "A Framework for Finding Product-Market Fit", channel: "Todd Jackson · Lenny's Podcast", minutes: null, year: null,
-    category: "Startup & Entrepreneurship", topics: ["Product", "Users"], stage: "Validation", gem: true,
-    why: "A clear, step-by-step framework from First Round Capital for getting from 'some users' to real pull." },
-
-  /* ---------- 💻 SaaS & Technology ---------- */
-  { id: "C27RVio2rOs", type: "Talk", india: false, title: "Building Product", channel: "Michael Seibel · Y Combinator", minutes: null, year: null,
-    category: "SaaS & Technology", topics: ["Product", "MVP"], stage: "MVP", gem: false,
-    why: "How small teams ship, learn and iterate fast — and why low costs buy you time to find what works." },
-  { id: "wftnSpVaqyo", type: "Lecture", india: false, title: "Building Product, Talking to Users, and Growing", channel: "Adora Cheung · Stanford CS183B", minutes: null, year: 2014,
-    category: "SaaS & Technology", topics: ["Product", "Users", "Growth"], stage: "MVP", gem: false,
-    why: "How to build the first version, measure what matters and keep talking to users while you grow." },
-  { id: "12D8zEdOPYo", also: ["Customer Behaviour"], type: "Lecture", india: false, title: "How to Build Products Users Love", channel: "Kevin Hale · Stanford CS183B", minutes: null, year: 2014,
-    category: "SaaS & Technology", topics: ["Product"], stage: "MVP", gem: false,
-    why: "The Wufoo founder on design, delight and treating customer support as part of the product." },
-  { id: "ASABxNenD_U", type: "Podcast", india: false, title: "Vertical AI Agents Could Be 10X Bigger Than SaaS", channel: "Y Combinator · Lightcone", minutes: null, year: 2024,
-    category: "SaaS & Technology", topics: ["AI", "Ideas"], stage: "Idea", gem: false,
-    why: "YC partners on why industry-specific AI agents are the next big opportunity for software founders." },
-  { id: "4hjiRmgmHiU", also: ["Sales"], type: "Talk", india: false, title: "How to Price for B2B", channel: "Y Combinator Startup School", minutes: null, year: null,
-    category: "SaaS & Technology", topics: ["Sales", "Product"], stage: "First Customer", gem: true,
-    why: "Most founders charge too little. A short, practical guide to pricing software for businesses." },
-
-  /* ---------- 💰 Investment & Venture Capital ---------- */
-  { id: "G7pJvC5xRhU", type: "Lecture", india: false, title: "How to Raise Money", channel: "Marc Andreessen, Ron Conway & Parker Conrad · Stanford CS183B", minutes: null, year: 2014,
-    category: "Investment & Venture Capital", topics: ["Fundraising"], stage: "Fundraising", gem: false,
-    why: "A top VC, a legendary angel and a founder explain how investors think and when you should raise." },
-  { id: "lw2X3PxKlAY", type: "Talk", india: false, title: "How to Pitch Your Seed Stage Startup", channel: "Michael Seibel · Y Combinator", minutes: null, year: null,
-    category: "Investment & Venture Capital", topics: ["Fundraising"], stage: "Fundraising", gem: false,
-    why: "What to say in your first two minutes with an investor — clear, simple and memorable." },
-  { id: "SHAh6WKBgiE", also: ["Sales"], type: "Lecture", india: false, title: "Sales and Marketing; How to Talk to Investors", channel: "Tyler Bosmeny & YC Partners · Stanford CS183B", minutes: null, year: 2014,
-    category: "Investment & Venture Capital", topics: ["Sales", "Fundraising"], stage: "Fundraising", gem: false,
-    why: "Two skills in one lecture: closing your first sales, then pitching investors in live role-plays." },
-  { id: "677ZtSMr4-4", type: "Explainer", india: false, title: "Startup Funding Explained: Everything You Need to Know", channel: "Startup funding explainer", minutes: null, year: null,
-    category: "Investment & Venture Capital", topics: ["Fundraising"], stage: "Fundraising", gem: true,
-    why: "Pre-seed, seed, Series A, dilution and valuations explained simply — a great first video on funding." },
-
-  /* ---------- 📈 Marketing & Growth ---------- */
-  { id: "hyYCn_kAngI", also: ["Sales"], type: "Talk", india: false, title: "How to Get Your First Customers", channel: "Gustaf Alströmer · Y Combinator Startup School", minutes: null, year: null,
-    category: "Marketing & Growth", topics: ["Sales", "Growth", "Users"], stage: "First Customer", gem: false,
-    why: "Do things that don't scale: how real YC companies found their very first paying users." },
-  { id: "NZp5j5hvn9I", also: ["Sales"], type: "Interview", india: false, title: "50 Founders Share How They Got Their First Customers", channel: "Founder compilation", minutes: null, year: null,
-    category: "Marketing & Growth", topics: ["Sales", "Growth"], stage: "First Customer", gem: true,
-    why: "Fifty short, real stories — the fastest way to see how many different paths to customer #1 exist." },
-  { id: "n_yHZ_vKjno", type: "Lecture", india: false, title: "Growth", channel: "Alex Schultz (Facebook) · Stanford CS183B", minutes: null, year: 2014,
-    category: "Marketing & Growth", topics: ["Growth"], stage: "Growth", gem: false,
-    why: "Facebook's growth lead on retention first, then the right metrics, then acquisition." },
-  { id: "ZoKLofsp8u0", type: "Podcast", india: false, title: "Lessons from Working with 600+ YC Startups", channel: "Gustaf Alströmer · Lenny's Podcast", minutes: null, year: null,
-    category: "Marketing & Growth", topics: ["Growth", "Product"], stage: "Growth", gem: false,
-    why: "Patterns from hundreds of startups on what actually drives growth — from Airbnb's former growth lead." },
-
-  /* ---------- 🎬 Founder Stories & Documentaries ---------- */
-  { id: "UF8uR6Z6KLc", also: ["Business Psychology"], type: "Talk", india: false, title: "Steve Jobs' 2005 Stanford Commencement Address", channel: "Stanford", minutes: null, year: 2005,
-    category: "Founder Stories & Documentaries", topics: ["Team"], stage: null, gem: false,
-    why: "Three short stories about connecting the dots, losing everything and starting again. Every founder should watch it once." },
-  { id: "W608u6sBFpo", type: "Interview", india: false, title: "Brian Chesky on Launching Airbnb and the Challenges of Scale", channel: "Blitzscaling · Stanford", minutes: null, year: null,
-    category: "Founder Stories & Documentaries", topics: ["Growth", "Team"], stage: "Growth", gem: false,
-    why: "How Airbnb went from air mattresses to a global company, told by its co-founder." },
-  { id: "8Pfa8kPjUio", also: ["Business Psychology"], type: "Interview", india: false, title: "A Conversation with NVIDIA's Jensen Huang", channel: "Jensen Huang interview", minutes: null, year: null,
-    category: "Founder Stories & Documentaries", topics: ["AI", "Team"], stage: null, gem: false,
-    why: "NVIDIA's founder on resilience, long-term bets and building a company that survived near-death moments." },
-  { id: "oiC-CuyUAK4", type: "Podcast", india: true, title: "Nikhil & Nithin Kamath, Founders of Zerodha", channel: "SNF Conversations", minutes: null, year: null,
-    category: "Founder Stories & Documentaries", topics: ["Growth"], stage: null, gem: false,
-    why: "How two brothers built India's biggest stock broker without venture capital." },
-  { id: "YKZCU0ynEbs", type: "Interview", india: true, title: "Why Zepto's Aadit Palicha Turned Down Stanford to Deliver Groceries", channel: "Y Combinator", minutes: null, year: null,
-    category: "Founder Stories & Documentaries", topics: ["Growth", "Ideas"], stage: null, gem: false,
-    why: "A young Indian founder on dropping out and building one of the country's fastest-growing startups." },
-  { id: "UacbJ72dluU", type: "Documentary", india: false, title: "Mr. Startup: Paul Graham, Founder of Y Combinator", channel: "Paul Graham profile", minutes: null, year: null,
-    category: "Founder Stories & Documentaries", topics: ["Team"], stage: null, gem: false,
-    why: "A look at the person behind YC and the simple rules he uses to judge founders." },
-  /* ---------- 🧠 Business Psychology ---------- */
-  { id: "9X68dm92HVI", type: "Talk", india: false, title: "Are We in Control of Our Decisions?", channel: "Dan Ariely · TED", minutes: null, year: 2009,
-    category: "Business Psychology", also: ["Customer Behaviour"], topics: ["Users", "Sales"], stage: null, gem: false,
-    why: "A behavioural economist shows how small changes in how choices are presented completely change what people pick." },
-  { id: "u4ZoJKF_VuA", type: "Talk", india: false, title: "Start with Why — How Great Leaders Inspire Action", channel: "Simon Sinek · TEDx", minutes: null, year: 2009,
-    category: "Business Psychology", also: ["Sales"], topics: ["Team", "Sales"], stage: null, gem: false,
-    why: "Why people buy into the reason behind a product before the product itself — useful for pitching, selling and hiring." }
-];
+/* The video list lives in videos.js */
 
 const TOPICS = ["All", "Ideas", "MVP", "Product", "Users", "Growth", "Sales", "Fundraising", "Team", "AI"];
 
@@ -391,7 +306,7 @@ const PLAYBOOKS = [
     title: "Stanford x YC: How to Start a Startup",
     founder: "Sam Altman, Paul Graham, Adora Cheung, Alex Schultz, Kevin Hale & more",
     summary: "The famous 2014 Stanford course, in the order it was taught — idea to fundraising.",
-    videos: ["CBYhVcO4WgI", "3fZNGwl7Lsg", "wftnSpVaqyo", "n_yHZ_vKjno", "12D8zEdOPYo", "G7pJvC5xRhU", "SHAh6WKBgiE"]
+    videos: ["CBYhVcO4WgI", "ii1jcLg-eIQ", "yP176MBG9Tk", "n_yHZ_vKjno", "12D8zEdOPYo", "uFX95HahaUs", "SHAh6WKBgiE"]
   },
   {
     title: "YC Startup School Essentials",
@@ -447,24 +362,26 @@ const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt
 const dur = m => m ? (m >= 60 ? `${Math.floor(m/60)}:${String(m%60).padStart(2,"0")}:00` : `${m}:00`) : "";
 const ago = y => y ? `${new Date().getFullYear() - y || "<1"} year${new Date().getFullYear() - y === 1 ? "" : "s"} ago` : "";
 const byId = id => VIDEOS.find(v => v.id === id);
+const yearOf = v => v.year || v.since || null;
 const inCat = (v, c) => v.category === c || (v.also || []).includes(c);
 
 let view = "home", topic = "All", stage = STAGES[0].name;
 let filtersOpen = false;
+const PAGE = 48; let shown = PAGE;
 const F = { year: null, type: null, feature: null, sort: "best" };
 const FILTER_GROUPS = [
-  { key: "year",    title: "Upload date", options: [...new Set(VIDEOS.map(v => v.year).filter(Boolean))].sort((a,b) => b - a).map(y => [String(y), String(y)]) },
-  { key: "type",    title: "Type",        options: [["Talk","Talk"],["Lecture","Lecture"],["Interview","Interview"],["Podcast","Podcast"],["Documentary","Documentary"],["Explainer","Explainer"]] },
+  { key: "year",    title: "Year", options: [...new Set(VIDEOS.map(yearOf).filter(Boolean))].sort((a,b) => b - a).map(y => [String(y), String(y)]) },
+  { key: "type",    title: "Type",        options: [...new Set(VIDEOS.map(v => v.type).filter(Boolean))].sort().map(t => [t, t]) },
   { key: "feature", title: "Features",    options: [["gem","Hidden gems"],["india","Indian founders"]] },
   { key: "sort",    title: "Sort by",     options: [["best","Best first"],["newest","Newest first"],["oldest","Oldest first"],["az","A → Z"]] }
 ];
 function applyFilters(list){
   let out = list.filter(v =>
-    (!F.year || String(v.year) === F.year) &&
+    (!F.year || String(yearOf(v)) === F.year) &&
     (!F.type || v.type === F.type) &&
     (!F.feature || (F.feature === "gem" ? v.gem : v.india)));
-  if(F.sort === "newest") out = [...out].sort((a,b) => (b.year||0) - (a.year||0));
-  if(F.sort === "oldest") out = [...out].sort((a,b) => (a.year||9999) - (b.year||9999));
+  if(F.sort === "newest") out = [...out].sort((a,b) => (yearOf(b)||0) - (yearOf(a)||0));
+  if(F.sort === "oldest") out = [...out].sort((a,b) => (yearOf(a)||9999) - (yearOf(b)||9999));
   if(F.sort === "az") out = [...out].sort((a,b) => a.title.localeCompare(b.title));
   return out;
 }
@@ -482,7 +399,7 @@ const PICK_ID = "MT4Ig2uqjTc"; /* "Founder pick" shown big on the homepage — c
 const LIST_VIEWS = ["home", "longs", "liked", "history", "later", "gems", "journey"];
 
 function card(v){
-  const meta = [v.channel, ago(v.year)].filter(Boolean).join(" • ");
+  const meta = [v.channel, v.year ? ago(v.year) : (v.since ? `recommended since ${v.since}` : "")].filter(Boolean).join(" • ");
   return `<article class="card" data-id="${esc(v.id)}" tabindex="0">
     <div class="thumb">
       <img loading="lazy" src="https://i.ytimg.com/vi/${esc(v.id)}/hqdefault.jpg" alt="">
@@ -500,7 +417,7 @@ function hero(){
   return `<section class="hero">
     <div>
       <h1>Watch what founders actually recommend.</h1>
-      <p>${VIDEOS.length} hand-picked talks on ideas, customers, sales and fundraising. No clickbait, no hustle-bros — just the videos worth your evening.</p>
+      <p>${VIDEOS.length.toLocaleString()} talks founders and builders keep recommending — on ideas, customers, sales, psychology and fundraising. No clickbait, no hustle-bros.</p>
       <button class="cta" data-go="journey">Start with the founder journey</button>
     </div>
     <div class="pick" data-id="${esc(p.id)}" role="button" tabindex="0" aria-label="Play ${esc(p.title)}">
@@ -511,13 +428,16 @@ function hero(){
   </section>`;
 }
 
-function grid(list, emptyMsg){
-  return list.length ? `<section class="grid">${list.map(card).join("")}</section>` : `<p class="empty">${emptyMsg}</p>`;
+function grid(list, emptyMsg, paged){
+  if(!list.length) return `<p class="empty">${emptyMsg}</p>`;
+  const vis = paged ? list.slice(0, shown) : list;
+  return `<section class="grid">${vis.map(card).join("")}</section>` +
+    (paged && list.length > shown ? `<div class="more"><button class="btn" data-more>Show more videos</button><span>${shown} of ${list.length.toLocaleString()}</span></div>` : "");
 }
 
 function render(){
   const q = $("#q").value.trim().toLowerCase();
-  const match = v => !q || [v.title, v.channel, v.why, v.topics.join(" ")].join(" ").toLowerCase().includes(q);
+  const match = v => !q || [v.title, v.channel, v.why, v.topics.join(" "), (v.tags || []).join(" "), v.category, (v.also || []).join(" ")].join(" ").toLowerCase().includes(q);
   let html = "";
 
   if(view === "home" || view === "longs"){
@@ -527,18 +447,18 @@ function render(){
     html = (view === "longs" ? `<div class="page-title">Longs — deep talks (${LONG_MINUTES}+ min)</div>` : "") +
       (view === "home" && topic === "All" && !q && !activeFilters() ? hero() : "") +
       filterBar() + `<div class="chips">${CHIPS.map(t => `<button class="chip" data-topic="${esc(t)}" aria-pressed="${t === topic}">${esc(t)}</button>`).join("")}</div>` +
-      grid(list, "No videos match yet. Try another topic or search.");
+      grid(list, "No videos match. Try another category, filter or search.", true);
   } else if(view === "journey"){
     const s = STAGES.find(x => x.name === stage) || STAGES[0];
     html = `<div class="page-title">Learn by Journey</div>
       <p class="intro">Watch in the order founders actually build: pick the stage you're in right now.</p>
       <div class="steps">${STAGES.map((x, i) => `<button class="step" data-stage="${esc(x.name)}" aria-pressed="${x.name === s.name}"><small>Step ${i + 1}</small><strong>${esc(x.name)}</strong></button>`).join("")}</div>
       <div class="page-title" style="font-size:18px">${esc(s.name)} — ${esc(s.tip)}</div>` +
-      grid(VIDEOS.filter(v => v.stage === s.name && match(v)), `No videos for the ${esc(s.name)} stage yet — more coming soon.`);
+      grid(VIDEOS.filter(v => v.stage === s.name && match(v)), `No videos for the ${esc(s.name)} stage yet — more coming soon.`, true);
   } else if(view === "gems"){
     html = `<div class="page-title">💎 Hidden Gems</div>
       <p class="intro">Excellent videos with relatively low popularity but strong educational value — the ones most founders never find.</p>` +
-      grid(VIDEOS.filter(v => v.gem && match(v)), "The first hidden gems are being picked. Check back soon.");
+      grid(VIDEOS.filter(v => v.gem && match(v)), "No hidden gems match your search.", true);
   } else if(view === "playbooks"){
     html = `<div class="page-title">📘 Founder Playbooks</div>
       <p class="intro">Curated collections on how real founders built their companies — watch them in order.</p>` +
@@ -581,6 +501,7 @@ function render(){
   html += `<footer>
     <div><strong>StartupTube</strong> is an open-source, community-driven library of the startup talks founders recommend most — on ideas, customers, sales, psychology and fundraising.</div>
     <div>Every video plays through YouTube's official embedded player and stays on YouTube. We don't host, download or edit any video, and all videos belong to their creators.</div>
+    <div>Includes data from <a href="https://hackertube.org/data" target="_blank" rel="noopener">HackerTube</a> and <a href="https://huggingface.co/datasets/open-index/hacker-news" target="_blank" rel="noopener">open-index/hacker-news</a>, used under ODC-By 1.0.</div>
     <div>Independent project, not affiliated with YouTube, Y Combinator, Stanford or any speaker.</div>
     <div><a href="${REPO_URL}" target="_blank" rel="noopener">View source on GitHub</a> · <a href="${REPO_URL}/issues/new" target="_blank" rel="noopener">Suggest a video</a> · <a href="#" data-help>About</a></div>
   </footer>`;
@@ -588,7 +509,7 @@ function render(){
   document.querySelectorAll(".side a").forEach(a => a.classList.toggle("active", a.dataset.view === view));
 }
 
-function go(v){ view = v; if(v !== "home") topic = "All"; document.body.classList.remove("open"); render(); window.scrollTo(0, 0); }
+function go(v){ shown = PAGE; view = v; if(v !== "home") topic = "All"; document.body.classList.remove("open"); render(); window.scrollTo(0, 0); }
 
 /* ---------- player ---------- */
 let current = null;
@@ -616,16 +537,17 @@ $("#side").addEventListener("click", e => { const a = e.target.closest("a[data-v
 document.querySelector(".logo").addEventListener("click", e => { e.preventDefault(); topic = "All"; $("#q").value = ""; go("home"); });
 $("#menu").onclick = () => { if(window.innerWidth <= 900) document.body.classList.toggle("open"); else document.body.classList.toggle("collapsed"); };
 $("#searchForm").addEventListener("submit", e => { e.preventDefault(); if(!LIST_VIEWS.includes(view)) view = "home"; render(); });
-$("#q").addEventListener("input", () => { if(!LIST_VIEWS.includes(view)) view = "home"; render(); });
+$("#q").addEventListener("input", () => { shown = PAGE; if(!LIST_VIEWS.includes(view)) view = "home"; render(); });
 $("#main").addEventListener("click", e => {
   const c = e.target.closest(".card, .pick"); if(c) return openVideo(c.dataset.id);
-  const ch = e.target.closest(".chip"); if(ch){ topic = ch.dataset.topic; return render(); }
+  const ch = e.target.closest(".chip"); if(ch){ topic = ch.dataset.topic; shown = PAGE; return render(); }
+  if(e.target.closest("[data-more]")){ shown += PAGE; return render(); }
   if(e.target.closest("[data-ftoggle]")){ filtersOpen = !filtersOpen; return render(); }
   if(e.target.closest("[data-fclear]")){ F.year = F.type = F.feature = null; F.sort = "best"; return render(); }
   const fo = e.target.closest(".fopt");
-  if(fo){ const k = fo.dataset.fkey, val = fo.dataset.fval; F[k] = k === "sort" ? val : (F[k] === val ? null : val); return render(); }
+  if(fo){ const k = fo.dataset.fkey, val = fo.dataset.fval; F[k] = k === "sort" ? val : (F[k] === val ? null : val); shown = PAGE; return render(); }
   const f = e.target.closest("[data-go]"); if(f) return go(f.dataset.go);
-  const st = e.target.closest(".step"); if(st){ stage = st.dataset.stage; return render(); }
+  const st = e.target.closest(".step"); if(st){ stage = st.dataset.stage; shown = PAGE; return render(); }
   const cat = e.target.closest(".cat"); if(cat){ topic = cat.dataset.cat; view = "home"; return render(); }
   if(e.target.closest("[data-help]")){ e.preventDefault(); return $("#help").showModal(); }
   const act = e.target.closest("[data-act]");
