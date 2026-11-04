@@ -1,6 +1,6 @@
 # StartupTube
 
-**The startup videos founders actually recommend.** → [startuptube.co](https://startuptube.co)
+**The startup videos founders actually recommend.** → [startuptube.pages.dev](https://startuptube.pages.dev)
 
 StartupTube is an open-source, community-driven library of 1,200+ free startup talks on YouTube — on ideas, customers, sales, business psychology, fundraising and founder stories. Every video comes with a short note on why people recommend it.
 
