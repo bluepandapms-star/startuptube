@@ -1,0 +1,649 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StartupTube — Startup videos founders actually recommend</title>
+<meta name="description" content="An open-source, community-driven library of the startup talks founders recommend most — ideas, customers, sales, psychology and fundraising. Played through YouTube's official embeds.">
+<meta property="og:title" content="StartupTube — Startup videos founders actually recommend">
+<meta property="og:description" content="A hand-picked library of the startup videos founders keep recommending.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://startuptube.co/">
+<link rel="canonical" href="https://startuptube.co/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F5F6FA; --surface:#FFFFFF; --hover:#EAEDF4; --text:#16213E; --muted:#5D6680; --line:#DFE3EC;
+    --accent:#EA580C; --accent-ink:#FFFFFF; --accent-soft:#FFEDD5; --navy:#16213E;
+    --sidebar:248px; --display:"Bricolage Grotesque", "Instrument Sans", system-ui, sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){ --bg:#0E1628; --surface:#172238; --hover:#202D47; --text:#EDF0F7; --muted:#9AA4BD; --line:#26324D; --accent:#FB923C; --accent-ink:#1A1206; --accent-soft:#3A1F0C; --navy:#EDF0F7; }
+  }
+  :root[data-theme="dark"]{ --bg:#0E1628; --surface:#172238; --hover:#202D47; --text:#EDF0F7; --muted:#9AA4BD; --line:#26324D; --accent:#FB923C; --accent-ink:#1A1206; --accent-soft:#3A1F0C; --navy:#EDF0F7; }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:400 15px/1.55 "Instrument Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  button{font:inherit;color:inherit}
+  a{color:inherit;text-decoration:none}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:8px}
+
+  /* header */
+  header{position:fixed;inset:0 0 auto 0;height:64px;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:0 18px;z-index:20}
+  .icon-btn{width:40px;height:40px;border-radius:12px;border:0;background:transparent;cursor:pointer;display:grid;place-items:center;flex:none}
+  .icon-btn:hover{background:var(--hover)}
+  .icon-btn svg{width:22px;height:22px;fill:currentColor}
+  .logo{display:flex;align-items:center;gap:8px;font-family:var(--display);font-weight:800;font-size:21px;letter-spacing:-.03em;white-space:nowrap}
+  .logo b{color:var(--accent);font-weight:800}
+  .logo .mark{width:32px;height:32px;flex:none}
+  .search{flex:1;max-width:560px;margin:0 auto;display:flex;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:0 6px 0 14px;transition:border-color .15s}
+  .search:focus-within{border-color:var(--accent)}
+  .search input{flex:1;min-width:0;padding:10px 4px;border:0;background:none;color:var(--text);font:inherit;outline:none}
+  .search button{width:38px;height:34px;border:0;border-radius:10px;background:var(--accent);color:var(--accent-ink);cursor:pointer;display:grid;place-items:center}
+  .search svg{width:18px;height:18px;fill:currentColor}
+
+  /* sidebar */
+  nav.side{position:fixed;top:64px;bottom:0;left:0;width:var(--sidebar);padding:14px 12px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);z-index:15}
+  .side a{position:relative;display:flex;align-items:center;gap:16px;padding:9px 14px;border-radius:12px;font-size:15px;cursor:pointer;color:var(--muted)}
+  .side a:hover{background:var(--hover);color:var(--text)}
+  .side a.active{background:var(--surface);color:var(--text);font-weight:600;box-shadow:inset 0 0 0 1px var(--line)}
+  .side a.active:before{content:"";position:absolute;left:-12px;top:8px;bottom:8px;width:4px;border-radius:0 4px 4px 0;background:var(--accent)}
+  .side a.active svg{fill:var(--accent)}
+  .side svg{width:21px;height:21px;fill:currentColor;flex:none}
+  .side hr{border:0;border-top:1px solid var(--line);margin:12px 6px}
+  .side .note{font-size:13px;color:var(--muted);padding:6px 14px;line-height:1.5}
+  body.collapsed nav.side{display:none}
+  body.collapsed main{margin-left:0}
+
+  /* main */
+  main{margin-left:var(--sidebar);padding:88px 32px 48px;max-width:calc(1440px + var(--sidebar))}
+  .page-title{font-family:var(--display);font-size:30px;font-weight:700;letter-spacing:-.025em;line-height:1.15;margin:4px 0 14px}
+  .intro{color:var(--muted);margin:-4px 0 22px;max-width:62ch;font-size:16px}
+
+  /* hero */
+  .hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:40px;align-items:center;padding:8px 0 40px;margin-bottom:28px;border-bottom:1px solid var(--line)}
+  .hero h1{font-family:var(--display);font-size:clamp(38px,5.2vw,68px);line-height:.98;letter-spacing:-.045em;font-weight:800;margin:0 0 18px;color:var(--navy);font-stretch:85%}
+  .hero p{font-size:18px;color:var(--muted);max-width:44ch;margin:0 0 26px}
+  .hero .cta{display:inline-flex;align-items:center;gap:10px;background:var(--accent);color:var(--accent-ink);border:0;padding:13px 22px;border-radius:14px;font-weight:600;font-size:16px;cursor:pointer}
+  .hero .cta:hover{filter:brightness(1.06)}
+  .pick{position:relative;cursor:pointer;border-radius:22px;overflow:hidden;background:#16213E;aspect-ratio:16/10}
+  .pick img{width:100%;height:100%;object-fit:cover;display:block;opacity:.88;transition:transform .5s ease}
+  .pick:hover img{transform:scale(1.03)}
+  .pick .scrim{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(10,16,32,.88))}
+  .pick .play{position:absolute;left:24px;top:22px;width:58px;height:58px;border-radius:50%;background:var(--accent);display:grid;place-items:center}
+  .pick .play:after{content:"";border-left:16px solid #fff;border-top:10px solid transparent;border-bottom:10px solid transparent;margin-left:4px}
+  .pick .cap{position:absolute;left:24px;right:24px;bottom:20px;color:#fff}
+  .pick .cap small{display:inline-block;background:rgba(255,255,255,.16);backdrop-filter:blur(6px);padding:3px 10px;border-radius:999px;font-size:13px;margin-bottom:10px}
+  .pick .cap strong{display:block;font-family:var(--display);font-size:clamp(20px,2vw,27px);line-height:1.15;letter-spacing:-.02em;font-weight:700}
+  .pick .cap span{display:block;font-size:14px;opacity:.8;margin-top:4px}
+
+  /* chips */
+  .chips{display:flex;gap:8px;overflow-x:auto;padding:4px 0 22px;scrollbar-width:none}
+  .chip{border:1px solid var(--line);background:var(--surface);padding:8px 15px;border-radius:999px;cursor:pointer;white-space:nowrap;font-size:14px;font-weight:500;color:var(--muted)}
+  .chip:hover{color:var(--text);border-color:var(--muted)}
+  .chip[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:var(--bg)}
+
+  /* video grid */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:34px 22px}
+  .card{cursor:pointer;outline:none;border-radius:16px}
+  .thumb{position:relative;aspect-ratio:16/9;border-radius:16px;overflow:hidden;background:var(--hover)}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s ease}
+  .card:hover .thumb img,.card:focus-visible .thumb img{transform:scale(1.04)}
+  .dur{position:absolute;right:10px;bottom:10px;background:rgba(14,22,40,.85);color:#fff;font-size:12px;font-weight:600;padding:2px 7px;border-radius:7px}
+  .prog{position:absolute;left:0;right:0;bottom:0;height:4px;background:var(--accent)}
+  .gem{position:absolute;left:10px;top:10px;background:var(--surface);color:var(--text);font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px}
+  .card h3{font-family:var(--display);font-size:17px;font-weight:700;letter-spacing:-.015em;line-height:1.28;margin:14px 0 5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .card:hover h3{color:var(--accent)}
+  .card .meta{color:var(--muted);font-size:14px;line-height:1.45}
+  .empty{color:var(--muted);padding:56px 24px;text-align:center;border:1px dashed var(--line);border-radius:18px}
+
+  /* categories */
+  .cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+  .cat{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px;cursor:pointer;text-align:left;transition:border-color .15s}
+  .cat:hover{border-color:var(--accent)}
+  .cat .ico{font-size:28px;margin-bottom:10px}
+  .cat strong{display:block;font-family:var(--display);font-size:19px;letter-spacing:-.02em;margin-bottom:4px}
+  .cat span{color:var(--muted);font-size:14px;line-height:1.45;display:block}
+  .cat em{display:inline-block;margin-top:12px;font-style:normal;font-size:12px;font-weight:600;color:var(--accent);background:var(--accent-soft);padding:3px 10px;border-radius:999px}
+
+  /* journey */
+  .steps{display:grid;grid-template-columns:repeat(6,minmax(130px,1fr));gap:0;overflow-x:auto;margin-bottom:28px;border:1px solid var(--line);border-radius:18px;background:var(--surface)}
+  .step{border:0;border-right:1px solid var(--line);background:none;padding:14px 16px;cursor:pointer;text-align:left}
+  .step:last-child{border-right:0}
+  .step small{display:block;color:var(--muted);font-size:12px;margin-bottom:2px}
+  .step strong{font-family:var(--display);font-size:16px;letter-spacing:-.01em}
+  .step[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+  .step[aria-pressed="true"] small{color:inherit;opacity:.8}
+
+  /* playbooks & case studies */
+  .collections{display:flex;flex-direction:column;gap:28px}
+  .collection{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:22px}
+  .collection h3{font-family:var(--display);margin:0 0 4px;font-size:22px;letter-spacing:-.02em}
+  .collection .sub{color:var(--muted);font-size:14px;margin-bottom:16px}
+  .collection .grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+  .facts{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-bottom:18px}
+  .fact{background:var(--bg);border-radius:14px;padding:12px 14px;font-size:14px;line-height:1.45}
+  .fact b{display:block;font-size:13px;color:var(--accent);font-weight:600;margin-bottom:3px}
+
+  /* filters */
+  .fbar{display:flex;gap:12px;align-items:center;margin-bottom:12px}
+  .fbtn{border:1px solid var(--line);background:var(--surface);padding:8px 15px;border-radius:12px;cursor:pointer;font-weight:600;font-size:14px;display:inline-flex;gap:8px;align-items:center}
+  .fbtn svg{width:17px;height:17px;fill:currentColor}
+  .fbtn.on{background:var(--navy);border-color:var(--navy);color:var(--bg)}
+  .fclear{border:0;background:none;color:var(--accent);cursor:pointer;font-weight:600;font-size:14px}
+  .fpanel{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px 28px;padding:18px 20px;margin-bottom:18px;background:var(--surface);border:1px solid var(--line);border-radius:18px}
+  .fcol h5{margin:0 0 8px;padding-bottom:8px;border-bottom:1px solid var(--line);font-size:14px;font-weight:600;color:var(--text)}
+  .fopt{display:block;border:0;background:none;padding:6px 0;cursor:pointer;color:var(--muted);font-size:14px;text-align:left}
+  .fopt:hover{color:var(--text)}
+  .fopt.on{color:var(--accent);font-weight:600}
+  .fopt.on:before{content:"✓ "}
+
+  /* settings */
+  .panel{max-width:560px;display:flex;flex-direction:column;gap:14px}
+  .panel .box{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px}
+  .panel h4{margin:0 0 6px;font-family:var(--display);font-size:17px}
+  .panel p{margin:0 0 12px;color:var(--muted);font-size:14px}
+
+  /* player dialog */
+  dialog{border:0;border-radius:22px;padding:0;width:min(1000px,94vw);background:var(--surface);color:var(--text);overflow:hidden}
+  dialog::backdrop{background:rgba(9,14,28,.78);backdrop-filter:blur(3px)}
+  dialog[open]{animation:pop .22s ease-out}
+  @keyframes pop{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+  .player{aspect-ratio:16/9;background:#000}
+  .player iframe{width:100%;height:100%;border:0;display:block}
+  .dbody{padding:20px 24px 24px}
+  .dbody h2{margin:0 0 6px;font-family:var(--display);font-size:24px;letter-spacing:-.02em;line-height:1.2}
+  .dmeta{color:var(--muted);font-size:14px;margin-bottom:14px}
+  .why{border-left:3px solid var(--accent);background:var(--bg);border-radius:0 14px 14px 0;padding:12px 16px;font-size:15px;line-height:1.55;margin-bottom:18px}
+  .why b{display:block;margin-bottom:3px;font-size:13px;color:var(--accent)}
+  .actions{display:flex;gap:8px;flex-wrap:wrap}
+  .btn{border:1px solid var(--line);background:var(--surface);padding:9px 16px;border-radius:12px;cursor:pointer;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:6px}
+  .btn:hover{background:var(--hover)}
+  .btn.on{background:var(--navy);border-color:var(--navy);color:var(--bg)}
+  .btn.red{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);margin-left:auto}
+  .help p{margin:0 0 12px;line-height:1.65;font-size:15px}
+  .help .btn.red{margin-left:0}
+
+  footer{margin-top:64px;padding-top:22px;border-top:1px solid var(--line);color:var(--muted);font-size:13px;line-height:1.75}
+  footer strong{color:var(--text);font-family:var(--display)}
+  footer a{text-decoration:underline;text-underline-offset:2px}
+
+  @media (max-width:1100px){ .hero{grid-template-columns:1fr;gap:26px} }
+  @media (max-width:900px){
+    nav.side{display:none;box-shadow:0 0 0 100vmax rgba(9,14,28,.45)}
+    body.open nav.side{display:block}
+    main{margin-left:0;padding:80px 16px 32px}
+    .grid{grid-template-columns:1fr;gap:28px}
+    .logo{font-size:18px;gap:6px}
+    .logo .mark{width:28px;height:28px}
+    .hide-sm{display:none}
+    .page-title{font-size:25px}
+    .btn.red{margin-left:0}
+  }
+  @media (max-width:640px){
+    header{flex-wrap:wrap;height:auto;padding:10px 12px;row-gap:8px}
+    .search{order:5;flex:1 0 100%;max-width:none;margin:0}
+    .logo{margin-right:auto}
+    nav.side{top:112px}
+    main{padding-top:128px}
+    .hero h1{font-size:40px}
+  }
+  @media (prefers-reduced-motion: reduce){ *{transition:none!important;animation:none!important} }
+</style>
+</head>
+<body>
+<header>
+  <button class="icon-btn" id="menu" aria-label="Menu"><svg viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg></button>
+  <a class="logo" href="#" data-view="home"><svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="var(--accent)"/><path d="M10 21l6-6 6 6" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 14l6-6 6 6" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".55"/></svg><span class="word">Startup<b>Tube</b></span></a>
+  <form class="search" id="searchForm" role="search">
+    <input id="q" type="search" placeholder="Search" aria-label="Search videos">
+    <button aria-label="Search"><svg viewBox="0 0 24 24"><path d="M10 3a7 7 0 015.6 11.2l5.1 5.1-1.4 1.4-5.1-5.1A7 7 0 1110 3zm0 2a5 5 0 100 10 5 5 0 000-10z"/></svg></button>
+  </form>
+  <button class="icon-btn hide-sm" id="helpBtn" aria-label="About StartupTube"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 110 20 10 10 0 010-20zm0 2a8 8 0 100 16 8 8 0 000-16zm0 11.5a1.25 1.25 0 110 2.5 1.25 1.25 0 010-2.5zM12 6a3.5 3.5 0 013.5 3.5c0 1.6-1 2.3-1.8 2.8-.6.4-.7.6-.7 1.2V14h-2v-.5c0-1.6 1-2.3 1.7-2.8.6-.4.8-.6.8-1.2a1.5 1.5 0 00-3 0h-2A3.5 3.5 0 0112 6z"/></svg></button>
+  <button class="icon-btn" id="themeBtn" aria-label="Toggle dark mode"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 109 9c0-.5 0-1-.1-1.4A5.5 5.5 0 0113.4 3.1 9 9 0 0012 3z"/></svg></button>
+</header>
+
+<nav class="side" id="side" aria-label="Main">
+  <a data-view="home" class="active"><svg viewBox="0 0 24 24"><path d="M12 3l9 8h-3v9h-5v-6h-2v6H6v-9H3z"/></svg>Home</a>
+  <a data-view="longs"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3zm2 2v10h14V7zm5 2l5 3-5 3z"/></svg>Longs</a>
+  <a data-view="liked"><svg viewBox="0 0 24 24"><path d="M2 10h4v11H2zm6 11V10l6-8 1.5 1.2c.4.3.6.9.5 1.4L15 9h6a2 2 0 012 2v2l-3 7a2 2 0 01-1.8 1z"/></svg>Liked</a>
+  <a data-view="history"><svg viewBox="0 0 24 24"><path d="M13 3a9 9 0 11-8.5 12h2.2A7 7 0 1013 5a7 7 0 00-5 2.1L10 9H4V3l2.6 2.6A9 9 0 0113 3zm-1 4h2v5l4 2.4-1 1.7-5-3z"/></svg>History</a>
+  <a data-view="later"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 110 20 10 10 0 010-20zm0 2a8 8 0 100 16 8 8 0 000-16zm1 3v5.2l3.6 2.2-1 1.6L11 13V7z"/></svg>Watch later</a>
+  <hr>
+  <a data-view="journey"><svg viewBox="0 0 24 24"><path d="M4 18h3v-4h4v-4h4V6h5v2h-3v4h-4v4h-4v4H4z"/></svg>Learn by Journey</a>
+  <a data-view="gems"><svg viewBox="0 0 24 24"><path d="M7 3h10l4 6-9 12L3 9zm1.2 2L6 8.5h3.2L10.6 5zm5.2 0l1.4 3.5H18L15.8 5zM5.6 10.5l5.4 7.2-2.4-7.2zm5.1 0l1.3 4 1.3-4zm4.7 0l-2.4 7.2 5.4-7.2z"/></svg>Hidden Gems</a>
+  <a data-view="playbooks"><svg viewBox="0 0 24 24"><path d="M6 2h12a2 2 0 012 2v18l-8-4-8 4V4a2 2 0 012-2zm0 2v14.8l6-3 6 3V4z"/></svg>Founder Playbooks</a>
+  <a data-view="cases"><svg viewBox="0 0 24 24"><path d="M9 3h6a2 2 0 012 2v2h3a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V9a2 2 0 012-2h3V5a2 2 0 012-2zm0 4h6V5H9zM4 9v10h16V9z"/></svg>Case Studies</a>
+  <hr>
+  <a data-view="categories"><svg viewBox="0 0 24 24"><path d="M3 3h8v8H3zm2 2v4h4V5zm8-2h8v8h-8zm2 2v4h4V5zM3 13h8v8H3zm2 2v4h4v-4zm8-2h8v8h-8zm2 2v4h4v-4z"/></svg>Categories</a>
+  <a data-view="settings"><svg viewBox="0 0 24 24"><path d="M13.9 2l.5 2.6c.6.2 1.2.5 1.7.9l2.5-.9 1.9 3.3-2 1.7c.1.6.1 1.3 0 1.9l2 1.7-1.9 3.3-2.5-.9c-.5.4-1.1.7-1.7.9L13.9 22h-3.8l-.5-2.6c-.6-.2-1.2-.5-1.7-.9l-2.5.9-1.9-3.3 2-1.7a6 6 0 010-1.9l-2-1.7 1.9-3.3 2.5.9c.5-.4 1.1-.7 1.7-.9L10.1 2zM12 9a3 3 0 100 6 3 3 0 000-6z"/></svg>Settings</a>
+  <hr>
+  <div class="note">Open source and community-driven. Your likes, history and watch-later stay in this browser only.</div>
+</nav>
+
+<main id="main"></main>
+
+<dialog id="dlg" aria-label="Video player">
+  <div class="player" id="player"></div>
+  <div class="dbody">
+    <h2 id="dTitle"></h2>
+    <div class="dmeta" id="dMeta"></div>
+    <div class="why"><b>Why founders recommend it</b><span id="dWhy"></span></div>
+    <div class="actions">
+      <button class="btn" id="dLike">👍 Like</button>
+      <button class="btn" id="dLater">🕒 Watch later</button>
+      <a class="btn" id="dYT" target="_blank" rel="noopener">Open on YouTube ↗</a>
+      <button class="btn red" id="dClose">Close</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="help" aria-label="About StartupTube">
+  <div class="dbody help">
+    <h2>About StartupTube</h2>
+    <p>StartupTube is an open-source, community-driven library of the startup talks founders recommend most — on ideas, customers, sales, business psychology and fundraising. Every video is hand-picked, with a short note on why it's worth your time.</p>
+    <p>No account, no algorithm, no clickbait. Your likes, history and watch-later list stay in your own browser.</p>
+    <p>Every video plays through YouTube's official embedded player and follows YouTube's Terms of Service. StartupTube doesn't host, download or edit any video; views count toward the original creator's channel. It's an independent project, not affiliated with YouTube, Y Combinator, Stanford or any speaker.</p>
+    <p>The code and the video list are open on GitHub. Know a talk every founder should watch? Suggest it there and the community can review it.</p>
+    <div class="actions"><a class="btn" id="repoLink" target="_blank" rel="noopener">View source on GitHub</a><button class="btn red" id="helpClose">Got it</button></div>
+  </div>
+</dialog>
+
+<script>
+/* ==================================================================
+   VIDEO LIST — to add a video, copy one block and change it.
+   id:      the part after "watch?v=" in the YouTube link
+   minutes: length in minutes (used for the duration badge and "Longs")
+   year:    year the video was published
+   category: one of CATEGORIES below (the 5 big sections)
+   topics:  pick from TOPICS below (smaller tags, used in search)
+   stage:   one of STAGES below (powers "Learn by Journey")
+   gem:     true = excellent but less-known video (powers "Hidden Gems")
+   type:    Talk, Lecture, Interview, Podcast, Documentary or Explainer (Filters)
+   india:   true = Indian founder / company (Filters)
+   also:    extra categories this video also belongs to (optional)
+   why:     one line on why founders should watch it
+   ================================================================== */
+const VIDEOS = [
+  /* ---------- 🚀 Startup & Entrepreneurship ---------- */
+  { id: "CBYhVcO4WgI", type: "Lecture", india: false, title: "How to Start a Startup — Lecture 1", channel: "Sam Altman & Dustin Moskovitz · Stanford CS183B", minutes: 44, year: 2014,
+    category: "Startup & Entrepreneurship", topics: ["Ideas", "Team"], stage: "Idea", gem: false,
+    why: "The classic opener: idea, product, team and execution all matter — and ideas that sound bad are often the good ones." },
+  { id: "3fZNGwl7Lsg", also: ["Business Psychology"], type: "Lecture", india: false, title: "Before the Startup", channel: "Paul Graham · Stanford CS183B", minutes: null, year: 2014,
+    category: "Startup & Entrepreneurship", topics: ["Ideas"], stage: "Idea", gem: false,
+    why: "YC's founder on the counterintuitive truths of startups and why the best ideas come from noticing problems in your own life." },
+  { id: "Th8JoIan4dg", type: "Talk", india: false, title: "How to Get and Evaluate Startup Ideas", channel: "Jared Friedman · Y Combinator Startup School", minutes: null, year: null,
+    category: "Startup & Entrepreneurship", topics: ["Ideas"], stage: "Idea", gem: false,
+    why: "A practical checklist for judging an idea — and the common traps first-time founders fall into." },
+  { id: "MT4Ig2uqjTc", also: ["Customer Behaviour"], type: "Talk", india: false, title: "How to Talk to Users", channel: "Eric Migicovsky · Y Combinator", minutes: 32, year: 2019,
+    category: "Startup & Entrepreneurship", topics: ["Users", "Product"], stage: "Validation", gem: false,
+    why: "A repeatable way to interview customers: ask about real past behaviour, not hypotheticals, and never pitch." },
+  { id: "0LNQxT9LvM0", also: ["Customer Behaviour"], type: "Talk", india: false, title: "How to Find Product Market Fit", channel: "David Rusenko · Y Combinator", minutes: null, year: null,
+    category: "Startup & Entrepreneurship", topics: ["Product", "Users"], stage: "Validation", gem: false,
+    why: "What product-market fit actually feels like from the inside, from the founder of Weebly." },
+  { id: "yc1Uwhfxacs", also: ["Customer Behaviour"], type: "Podcast", india: false, title: "A Framework for Finding Product-Market Fit", channel: "Todd Jackson · Lenny's Podcast", minutes: null, year: null,
+    category: "Startup & Entrepreneurship", topics: ["Product", "Users"], stage: "Validation", gem: true,
+    why: "A clear, step-by-step framework from First Round Capital for getting from 'some users' to real pull." },
+
+  /* ---------- 💻 SaaS & Technology ---------- */
+  { id: "C27RVio2rOs", type: "Talk", india: false, title: "Building Product", channel: "Michael Seibel · Y Combinator", minutes: null, year: null,
+    category: "SaaS & Technology", topics: ["Product", "MVP"], stage: "MVP", gem: false,
+    why: "How small teams ship, learn and iterate fast — and why low costs buy you time to find what works." },
+  { id: "wftnSpVaqyo", type: "Lecture", india: false, title: "Building Product, Talking to Users, and Growing", channel: "Adora Cheung · Stanford CS183B", minutes: null, year: 2014,
+    category: "SaaS & Technology", topics: ["Product", "Users", "Growth"], stage: "MVP", gem: false,
+    why: "How to build the first version, measure what matters and keep talking to users while you grow." },
+  { id: "12D8zEdOPYo", also: ["Customer Behaviour"], type: "Lecture", india: false, title: "How to Build Products Users Love", channel: "Kevin Hale · Stanford CS183B", minutes: null, year: 2014,
+    category: "SaaS & Technology", topics: ["Product"], stage: "MVP", gem: false,
+    why: "The Wufoo founder on design, delight and treating customer support as part of the product." },
+  { id: "ASABxNenD_U", type: "Podcast", india: false, title: "Vertical AI Agents Could Be 10X Bigger Than SaaS", channel: "Y Combinator · Lightcone", minutes: null, year: 2024,
+    category: "SaaS & Technology", topics: ["AI", "Ideas"], stage: "Idea", gem: false,
+    why: "YC partners on why industry-specific AI agents are the next big opportunity for software founders." },
+  { id: "4hjiRmgmHiU", also: ["Sales"], type: "Talk", india: false, title: "How to Price for B2B", channel: "Y Combinator Startup School", minutes: null, year: null,
+    category: "SaaS & Technology", topics: ["Sales", "Product"], stage: "First Customer", gem: true,
+    why: "Most founders charge too little. A short, practical guide to pricing software for businesses." },
+
+  /* ---------- 💰 Investment & Venture Capital ---------- */
+  { id: "G7pJvC5xRhU", type: "Lecture", india: false, title: "How to Raise Money", channel: "Marc Andreessen, Ron Conway & Parker Conrad · Stanford CS183B", minutes: null, year: 2014,
+    category: "Investment & Venture Capital", topics: ["Fundraising"], stage: "Fundraising", gem: false,
+    why: "A top VC, a legendary angel and a founder explain how investors think and when you should raise." },
+  { id: "lw2X3PxKlAY", type: "Talk", india: false, title: "How to Pitch Your Seed Stage Startup", channel: "Michael Seibel · Y Combinator", minutes: null, year: null,
+    category: "Investment & Venture Capital", topics: ["Fundraising"], stage: "Fundraising", gem: false,
+    why: "What to say in your first two minutes with an investor — clear, simple and memorable." },
+  { id: "SHAh6WKBgiE", also: ["Sales"], type: "Lecture", india: false, title: "Sales and Marketing; How to Talk to Investors", channel: "Tyler Bosmeny & YC Partners · Stanford CS183B", minutes: null, year: 2014,
+    category: "Investment & Venture Capital", topics: ["Sales", "Fundraising"], stage: "Fundraising", gem: false,
+    why: "Two skills in one lecture: closing your first sales, then pitching investors in live role-plays." },
+  { id: "677ZtSMr4-4", type: "Explainer", india: false, title: "Startup Funding Explained: Everything You Need to Know", channel: "Startup funding explainer", minutes: null, year: null,
+    category: "Investment & Venture Capital", topics: ["Fundraising"], stage: "Fundraising", gem: true,
+    why: "Pre-seed, seed, Series A, dilution and valuations explained simply — a great first video on funding." },
+
+  /* ---------- 📈 Marketing & Growth ---------- */
+  { id: "hyYCn_kAngI", also: ["Sales"], type: "Talk", india: false, title: "How to Get Your First Customers", channel: "Gustaf Alströmer · Y Combinator Startup School", minutes: null, year: null,
+    category: "Marketing & Growth", topics: ["Sales", "Growth", "Users"], stage: "First Customer", gem: false,
+    why: "Do things that don't scale: how real YC companies found their very first paying users." },
+  { id: "NZp5j5hvn9I", also: ["Sales"], type: "Interview", india: false, title: "50 Founders Share How They Got Their First Customers", channel: "Founder compilation", minutes: null, year: null,
+    category: "Marketing & Growth", topics: ["Sales", "Growth"], stage: "First Customer", gem: true,
+    why: "Fifty short, real stories — the fastest way to see how many different paths to customer #1 exist." },
+  { id: "n_yHZ_vKjno", type: "Lecture", india: false, title: "Growth", channel: "Alex Schultz (Facebook) · Stanford CS183B", minutes: null, year: 2014,
+    category: "Marketing & Growth", topics: ["Growth"], stage: "Growth", gem: false,
+    why: "Facebook's growth lead on retention first, then the right metrics, then acquisition." },
+  { id: "ZoKLofsp8u0", type: "Podcast", india: false, title: "Lessons from Working with 600+ YC Startups", channel: "Gustaf Alströmer · Lenny's Podcast", minutes: null, year: null,
+    category: "Marketing & Growth", topics: ["Growth", "Product"], stage: "Growth", gem: false,
+    why: "Patterns from hundreds of startups on what actually drives growth — from Airbnb's former growth lead." },
+
+  /* ---------- 🎬 Founder Stories & Documentaries ---------- */
+  { id: "UF8uR6Z6KLc", also: ["Business Psychology"], type: "Talk", india: false, title: "Steve Jobs' 2005 Stanford Commencement Address", channel: "Stanford", minutes: null, year: 2005,
+    category: "Founder Stories & Documentaries", topics: ["Team"], stage: null, gem: false,
+    why: "Three short stories about connecting the dots, losing everything and starting again. Every founder should watch it once." },
+  { id: "W608u6sBFpo", type: "Interview", india: false, title: "Brian Chesky on Launching Airbnb and the Challenges of Scale", channel: "Blitzscaling · Stanford", minutes: null, year: null,
+    category: "Founder Stories & Documentaries", topics: ["Growth", "Team"], stage: "Growth", gem: false,
+    why: "How Airbnb went from air mattresses to a global company, told by its co-founder." },
+  { id: "8Pfa8kPjUio", also: ["Business Psychology"], type: "Interview", india: false, title: "A Conversation with NVIDIA's Jensen Huang", channel: "Jensen Huang interview", minutes: null, year: null,
+    category: "Founder Stories & Documentaries", topics: ["AI", "Team"], stage: null, gem: false,
+    why: "NVIDIA's founder on resilience, long-term bets and building a company that survived near-death moments." },
+  { id: "oiC-CuyUAK4", type: "Podcast", india: true, title: "Nikhil & Nithin Kamath, Founders of Zerodha", channel: "SNF Conversations", minutes: null, year: null,
+    category: "Founder Stories & Documentaries", topics: ["Growth"], stage: null, gem: false,
+    why: "How two brothers built India's biggest stock broker without venture capital." },
+  { id: "YKZCU0ynEbs", type: "Interview", india: true, title: "Why Zepto's Aadit Palicha Turned Down Stanford to Deliver Groceries", channel: "Y Combinator", minutes: null, year: null,
+    category: "Founder Stories & Documentaries", topics: ["Growth", "Ideas"], stage: null, gem: false,
+    why: "A young Indian founder on dropping out and building one of the country's fastest-growing startups." },
+  { id: "UacbJ72dluU", type: "Documentary", india: false, title: "Mr. Startup: Paul Graham, Founder of Y Combinator", channel: "Paul Graham profile", minutes: null, year: null,
+    category: "Founder Stories & Documentaries", topics: ["Team"], stage: null, gem: false,
+    why: "A look at the person behind YC and the simple rules he uses to judge founders." },
+  /* ---------- 🧠 Business Psychology ---------- */
+  { id: "9X68dm92HVI", type: "Talk", india: false, title: "Are We in Control of Our Decisions?", channel: "Dan Ariely · TED", minutes: null, year: 2009,
+    category: "Business Psychology", also: ["Customer Behaviour"], topics: ["Users", "Sales"], stage: null, gem: false,
+    why: "A behavioural economist shows how small changes in how choices are presented completely change what people pick." },
+  { id: "u4ZoJKF_VuA", type: "Talk", india: false, title: "Start with Why — How Great Leaders Inspire Action", channel: "Simon Sinek · TEDx", minutes: null, year: 2009,
+    category: "Business Psychology", also: ["Sales"], topics: ["Team", "Sales"], stage: null, gem: false,
+    why: "Why people buy into the reason behind a product before the product itself — useful for pitching, selling and hiring." }
+];
+
+const TOPICS = ["All", "Ideas", "MVP", "Product", "Users", "Growth", "Sales", "Fundraising", "Team", "AI"];
+
+/* VIDEO CATEGORIES — every video belongs to one (set "category" on each video) */
+const CATEGORIES = [
+  { name: "Startup & Entrepreneurship", icon: "🚀", desc: "Starting up, bootstrapping, scaling, business models" },
+  { name: "SaaS & Technology",          icon: "💻", desc: "SaaS, AI, software, coding, product building" },
+  { name: "Investment & Venture Capital", icon: "💰", desc: "Fundraising, angel investors, VC, valuations" },
+  { name: "Marketing & Growth",         icon: "📈", desc: "SEO, advertising, sales, distribution, growth" },
+  { name: "Founder Stories & Documentaries", icon: "🎬", desc: "Company origins, failures, success stories" },
+  { name: "Sales",                      icon: "🤝", desc: "Selling, pricing, closing deals, getting paying customers" },
+  { name: "Customer Behaviour",         icon: "🧑‍🤝‍🧑", desc: "Why customers buy, what they really want, user research" },
+  { name: "Business Psychology",        icon: "🧠", desc: "How people decide, persuasion, founder mindset" }
+];
+const CHIPS = ["All", ...CATEGORIES.map(c => c.name)];
+
+/* Learn by Journey — the order a founder goes through */
+const STAGES = [
+  { name: "Idea",           tip: "Find a problem worth solving" },
+  { name: "Validation",     tip: "Prove people actually want it" },
+  { name: "MVP",            tip: "Ship the smallest useful version" },
+  { name: "First Customer", tip: "Get someone to pay or commit" },
+  { name: "Growth",         tip: "Find a repeatable way to grow" },
+  { name: "Fundraising",    tip: "Raise money, if you need it" }
+];
+
+/* FOUNDER PLAYBOOKS — how real founders built their companies.
+   Copy the example block, remove the // marks, and list video ids in order. */
+const PLAYBOOKS = [
+  {
+    title: "Stanford x YC: How to Start a Startup",
+    founder: "Sam Altman, Paul Graham, Adora Cheung, Alex Schultz, Kevin Hale & more",
+    summary: "The famous 2014 Stanford course, in the order it was taught — idea to fundraising.",
+    videos: ["CBYhVcO4WgI", "3fZNGwl7Lsg", "wftnSpVaqyo", "n_yHZ_vKjno", "12D8zEdOPYo", "G7pJvC5xRhU", "SHAh6WKBgiE"]
+  },
+  {
+    title: "YC Startup School Essentials",
+    founder: "Y Combinator partners",
+    summary: "The shortest path from idea to first customers, taught by the people who run YC.",
+    videos: ["Th8JoIan4dg", "MT4Ig2uqjTc", "C27RVio2rOs", "hyYCn_kAngI", "4hjiRmgmHiU", "lw2X3PxKlAY"]
+  }
+];
+
+/* STARTUP CASE STUDIES — one company, its model, challenges and growth. */
+const CASES = [
+  {
+    company: "Airbnb",
+    model: "Marketplace — earns a service fee on every booking",
+    challenge: "Almost no traction early on, and people didn't trust staying in a stranger's home",
+    growth: "Founders met hosts in person, improved listings by hand and built trust features like reviews",
+    videos: ["W608u6sBFpo"]
+  },
+  {
+    company: "Zerodha",
+    model: "Discount stock broker — low, flat fees instead of percentage commissions",
+    challenge: "Competing with big banks and brokers without any venture capital",
+    growth: "Word of mouth, free investor education and a product built for everyday traders",
+    videos: ["oiC-CuyUAK4"]
+  },
+  {
+    company: "Zepto",
+    model: "Quick commerce — groceries delivered in minutes from nearby dark stores",
+    challenge: "Very thin margins and huge operational complexity at speed",
+    growth: "A dense network of small warehouses and fast, aggressive city expansion",
+    videos: ["YKZCU0ynEbs"]
+  }
+];
+const LONG_MINUTES = 40;
+
+/* ---------- saved state (this browser only) ---------- */
+function load(k){ try { return JSON.parse(localStorage.getItem("st_" + k) || "[]"); } catch(e){ return []; } }
+function save(k, v){ try { localStorage.setItem("st_" + k, JSON.stringify(v)); } catch(e){} }
+let liked = load("liked"), later = load("later"), history = load("history");
+
+/* ---------- theme ---------- */
+(function(){ try { const t = localStorage.getItem("st_theme"); if(t) document.documentElement.dataset.theme = t; } catch(e){} })();
+document.getElementById("themeBtn").onclick = () => {
+  const dark = getComputedStyle(document.documentElement).getPropertyValue("--bg").trim() === "#0E1628";
+  const next = dark ? "light" : "dark";
+  document.documentElement.dataset.theme = next;
+  try { localStorage.setItem("st_theme", next); } catch(e){}
+};
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const dur = m => m ? (m >= 60 ? `${Math.floor(m/60)}:${String(m%60).padStart(2,"0")}:00` : `${m}:00`) : "";
+const ago = y => y ? `${new Date().getFullYear() - y || "<1"} year${new Date().getFullYear() - y === 1 ? "" : "s"} ago` : "";
+const byId = id => VIDEOS.find(v => v.id === id);
+const inCat = (v, c) => v.category === c || (v.also || []).includes(c);
+
+let view = "home", topic = "All", stage = STAGES[0].name;
+let filtersOpen = false;
+const F = { year: null, type: null, feature: null, sort: "best" };
+const FILTER_GROUPS = [
+  { key: "year",    title: "Upload date", options: [...new Set(VIDEOS.map(v => v.year).filter(Boolean))].sort((a,b) => b - a).map(y => [String(y), String(y)]) },
+  { key: "type",    title: "Type",        options: [["Talk","Talk"],["Lecture","Lecture"],["Interview","Interview"],["Podcast","Podcast"],["Documentary","Documentary"],["Explainer","Explainer"]] },
+  { key: "feature", title: "Features",    options: [["gem","Hidden gems"],["india","Indian founders"]] },
+  { key: "sort",    title: "Sort by",     options: [["best","Best first"],["newest","Newest first"],["oldest","Oldest first"],["az","A → Z"]] }
+];
+function applyFilters(list){
+  let out = list.filter(v =>
+    (!F.year || String(v.year) === F.year) &&
+    (!F.type || v.type === F.type) &&
+    (!F.feature || (F.feature === "gem" ? v.gem : v.india)));
+  if(F.sort === "newest") out = [...out].sort((a,b) => (b.year||0) - (a.year||0));
+  if(F.sort === "oldest") out = [...out].sort((a,b) => (a.year||9999) - (b.year||9999));
+  if(F.sort === "az") out = [...out].sort((a,b) => a.title.localeCompare(b.title));
+  return out;
+}
+const activeFilters = () => ["year","type","feature"].filter(k => F[k]).length + (F.sort !== "best" ? 1 : 0);
+function filterBar(){
+  const n = activeFilters();
+  return `<div class="fbar">
+    <button class="fbtn ${filtersOpen || n ? "on" : ""}" data-ftoggle><svg viewBox="0 0 24 24"><path d="M3 6h10v2H3zm14 0h4v2h-4zm-2-2h2v6h-2zM3 16h4v2H3zm8 0h10v2H11zm-2-2h2v6H9z"/></svg>Filters${n ? ` (${n})` : ""}</button>
+    ${n ? `<button class="fclear" data-fclear>Clear filters</button>` : ""}
+  </div>` + (filtersOpen ? `<div class="fpanel">${FILTER_GROUPS.map(g => `<div class="fcol"><h5>${g.title}</h5>${
+    g.options.map(([val,label]) => `<button class="fopt ${F[g.key] === val ? "on" : ""}" data-fkey="${g.key}" data-fval="${val}">${label}</button>`).join("")}</div>`).join("")}</div>` : "");
+}
+const REPO_URL = "https://github.com/bluepandapms-star/startuptube"; /* public GitHub repo — anyone can suggest videos there */
+const PICK_ID = "MT4Ig2uqjTc"; /* "Founder pick" shown big on the homepage — change any time */
+const LIST_VIEWS = ["home", "longs", "liked", "history", "later", "gems", "journey"];
+
+function card(v){
+  const meta = [v.channel, ago(v.year)].filter(Boolean).join(" • ");
+  return `<article class="card" data-id="${esc(v.id)}" tabindex="0">
+    <div class="thumb">
+      <img loading="lazy" src="https://i.ytimg.com/vi/${esc(v.id)}/hqdefault.jpg" alt="">
+      ${v.minutes ? `<span class="dur">${dur(v.minutes)}</span>` : ""}
+      ${v.gem ? `<span class="gem">💎 Hidden gem</span>` : ""}
+      ${history.includes(v.id) ? `<span class="prog"></span>` : ""}
+    </div>
+    <h3>${esc(v.title)}</h3>
+    <div class="meta">${esc(meta)}</div>
+  </article>`;
+}
+
+function hero(){
+  const p = byId(PICK_ID) || VIDEOS[0];
+  return `<section class="hero">
+    <div>
+      <h1>Watch what founders actually recommend.</h1>
+      <p>${VIDEOS.length} hand-picked talks on ideas, customers, sales and fundraising. No clickbait, no hustle-bros — just the videos worth your evening.</p>
+      <button class="cta" data-go="journey">Start with the founder journey</button>
+    </div>
+    <div class="pick" data-id="${esc(p.id)}" role="button" tabindex="0" aria-label="Play ${esc(p.title)}">
+      <img src="https://i.ytimg.com/vi/${esc(p.id)}/hqdefault.jpg" alt="">
+      <div class="scrim"></div><div class="play"></div>
+      <div class="cap"><small>Founder pick this week</small><strong>${esc(p.title)}</strong><span>${esc(p.channel)}</span></div>
+    </div>
+  </section>`;
+}
+
+function grid(list, emptyMsg){
+  return list.length ? `<section class="grid">${list.map(card).join("")}</section>` : `<p class="empty">${emptyMsg}</p>`;
+}
+
+function render(){
+  const q = $("#q").value.trim().toLowerCase();
+  const match = v => !q || [v.title, v.channel, v.why, v.topics.join(" ")].join(" ").toLowerCase().includes(q);
+  let html = "";
+
+  if(view === "home" || view === "longs"){
+    let list = VIDEOS.filter(v => (topic === "All" || inCat(v, topic) || v.topics.includes(topic)) && match(v));
+    if(view === "longs") list = list.filter(v => v.minutes && v.minutes >= LONG_MINUTES);
+    list = applyFilters(list);
+    html = (view === "longs" ? `<div class="page-title">Longs — deep talks (${LONG_MINUTES}+ min)</div>` : "") +
+      (view === "home" && topic === "All" && !q && !activeFilters() ? hero() : "") +
+      filterBar() + `<div class="chips">${CHIPS.map(t => `<button class="chip" data-topic="${esc(t)}" aria-pressed="${t === topic}">${esc(t)}</button>`).join("")}</div>` +
+      grid(list, "No videos match yet. Try another topic or search.");
+  } else if(view === "journey"){
+    const s = STAGES.find(x => x.name === stage) || STAGES[0];
+    html = `<div class="page-title">Learn by Journey</div>
+      <p class="intro">Watch in the order founders actually build: pick the stage you're in right now.</p>
+      <div class="steps">${STAGES.map((x, i) => `<button class="step" data-stage="${esc(x.name)}" aria-pressed="${x.name === s.name}"><small>Step ${i + 1}</small><strong>${esc(x.name)}</strong></button>`).join("")}</div>
+      <div class="page-title" style="font-size:18px">${esc(s.name)} — ${esc(s.tip)}</div>` +
+      grid(VIDEOS.filter(v => v.stage === s.name && match(v)), `No videos for the ${esc(s.name)} stage yet — more coming soon.`);
+  } else if(view === "gems"){
+    html = `<div class="page-title">💎 Hidden Gems</div>
+      <p class="intro">Excellent videos with relatively low popularity but strong educational value — the ones most founders never find.</p>` +
+      grid(VIDEOS.filter(v => v.gem && match(v)), "The first hidden gems are being picked. Check back soon.");
+  } else if(view === "playbooks"){
+    html = `<div class="page-title">📘 Founder Playbooks</div>
+      <p class="intro">Curated collections on how real founders built their companies — watch them in order.</p>` +
+      (PLAYBOOKS.length ? `<div class="collections">${PLAYBOOKS.map(p => `<section class="collection">
+        <h3>${esc(p.title)}</h3><div class="sub">${esc(p.founder)} · ${esc(p.summary)}</div>
+        ${grid(p.videos.map(byId).filter(Boolean), "Videos for this playbook are coming soon.")}</section>`).join("")}</div>`
+        : `<p class="empty">The first founder playbooks are being put together. Check back soon.</p>`);
+  } else if(view === "cases"){
+    html = `<div class="page-title">🏢 Startup Case Studies</div>
+      <p class="intro">Explore companies: how they make money, what nearly killed them, and how they grew.</p>` +
+      (CASES.length ? `<div class="collections">${CASES.map(c => `<section class="collection">
+        <h3>${esc(c.company)}</h3>
+        <div class="facts">
+          <div class="fact"><b>Business model</b>${esc(c.model)}</div>
+          <div class="fact"><b>Biggest challenge</b>${esc(c.challenge)}</div>
+          <div class="fact"><b>How they grew</b>${esc(c.growth)}</div>
+        </div>
+        ${grid(c.videos.map(byId).filter(Boolean), "Videos for this case study are coming soon.")}</section>`).join("")}</div>`
+        : `<p class="empty">The first case studies are being written. Check back soon.</p>`);
+  } else if(view === "liked"){
+    html = `<div class="page-title">Liked videos</div>` + grid(liked.map(byId).filter(Boolean).filter(match), "Videos you like will show up here.");
+  } else if(view === "history"){
+    html = `<div class="page-title">History</div>` + grid(history.map(byId).filter(Boolean).filter(match), "Videos you open will show up here.");
+  } else if(view === "later"){
+    html = `<div class="page-title">Watch later</div>` + grid(later.map(byId).filter(Boolean).filter(match), "Save videos for later and they'll show up here.");
+  } else if(view === "categories"){
+    html = `<div class="page-title">Categories</div><section class="cats">` +
+      CATEGORIES.map(c => {
+        const n = VIDEOS.filter(v => inCat(v, c.name)).length;
+        return `<button class="cat" data-cat="${esc(c.name)}"><div class="ico">${c.icon}</div><strong>${esc(c.name)}</strong><span>${esc(c.desc)}</span><em>${n} video${n === 1 ? "" : "s"}</em></button>`;
+      }).join("") + `</section>`;
+  } else if(view === "settings"){
+    html = `<div class="page-title">Settings</div><div class="panel">
+      <div class="box"><h4>Clear history</h4><p>Remove every video from your watch history.</p><button class="btn" data-act="clear-history">Clear history</button></div>
+      <div class="box"><h4>Clear likes & watch later</h4><p>Empty your Liked and Watch later lists.</p><button class="btn" data-act="clear-lists">Clear lists</button></div>
+      <div class="box"><h4>Your data</h4><p>Everything is stored only in this browser. Nothing is sent to us.</p></div>
+    </div>`;
+  }
+
+  html += `<footer>
+    <div><strong>StartupTube</strong> is an open-source, community-driven library of the startup talks founders recommend most — on ideas, customers, sales, psychology and fundraising.</div>
+    <div>Every video plays through YouTube's official embedded player and stays on YouTube. We don't host, download or edit any video, and all videos belong to their creators.</div>
+    <div>Independent project, not affiliated with YouTube, Y Combinator, Stanford or any speaker.</div>
+    <div><a href="${REPO_URL}" target="_blank" rel="noopener">View source on GitHub</a> · <a href="${REPO_URL}/issues/new" target="_blank" rel="noopener">Suggest a video</a> · <a href="#" data-help>About</a></div>
+  </footer>`;
+  $("#main").innerHTML = html;
+  document.querySelectorAll(".side a").forEach(a => a.classList.toggle("active", a.dataset.view === view));
+}
+
+function go(v){ view = v; if(v !== "home") topic = "All"; document.body.classList.remove("open"); render(); window.scrollTo(0, 0); }
+
+/* ---------- player ---------- */
+let current = null;
+function syncButtons(){
+  $("#dLike").classList.toggle("on", liked.includes(current.id));
+  $("#dLater").classList.toggle("on", later.includes(current.id));
+  $("#dLater").textContent = later.includes(current.id) ? "🕒 Saved" : "🕒 Watch later";
+}
+function openVideo(id){
+  const v = byId(id); if(!v) return;
+  current = v;
+  history = [id, ...history.filter(x => x !== id)].slice(0, 200); save("history", history);
+  $("#player").innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${esc(v.id)}?autoplay=1&rel=0" title="${esc(v.title)}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+  $("#dTitle").textContent = v.title;
+  $("#dMeta").textContent = [v.channel, v.minutes ? `${v.minutes} min` : "", v.year].filter(Boolean).join(" · ");
+  $("#dWhy").textContent = v.why;
+  $("#dYT").href = `https://www.youtube.com/watch?v=${v.id}`;
+  syncButtons();
+  $("#dlg").showModal();
+}
+function toggle(list, key){ const i = list.indexOf(current.id); i >= 0 ? list.splice(i, 1) : list.unshift(current.id); save(key, list); syncButtons(); render(); }
+
+/* ---------- events ---------- */
+$("#side").addEventListener("click", e => { const a = e.target.closest("a[data-view]"); if(a){ e.preventDefault(); go(a.dataset.view); } });
+document.querySelector(".logo").addEventListener("click", e => { e.preventDefault(); topic = "All"; $("#q").value = ""; go("home"); });
+$("#menu").onclick = () => { if(window.innerWidth <= 900) document.body.classList.toggle("open"); else document.body.classList.toggle("collapsed"); };
+$("#searchForm").addEventListener("submit", e => { e.preventDefault(); if(!LIST_VIEWS.includes(view)) view = "home"; render(); });
+$("#q").addEventListener("input", () => { if(!LIST_VIEWS.includes(view)) view = "home"; render(); });
+$("#main").addEventListener("click", e => {
+  const c = e.target.closest(".card, .pick"); if(c) return openVideo(c.dataset.id);
+  const ch = e.target.closest(".chip"); if(ch){ topic = ch.dataset.topic; return render(); }
+  if(e.target.closest("[data-ftoggle]")){ filtersOpen = !filtersOpen; return render(); }
+  if(e.target.closest("[data-fclear]")){ F.year = F.type = F.feature = null; F.sort = "best"; return render(); }
+  const fo = e.target.closest(".fopt");
+  if(fo){ const k = fo.dataset.fkey, val = fo.dataset.fval; F[k] = k === "sort" ? val : (F[k] === val ? null : val); return render(); }
+  const f = e.target.closest("[data-go]"); if(f) return go(f.dataset.go);
+  const st = e.target.closest(".step"); if(st){ stage = st.dataset.stage; return render(); }
+  const cat = e.target.closest(".cat"); if(cat){ topic = cat.dataset.cat; view = "home"; return render(); }
+  if(e.target.closest("[data-help]")){ e.preventDefault(); return $("#help").showModal(); }
+  const act = e.target.closest("[data-act]");
+  if(act){
+    if(act.dataset.act === "clear-history"){ history = []; save("history", history); act.textContent = "Cleared ✓"; }
+    if(act.dataset.act === "clear-lists"){ liked = []; later = []; save("liked", liked); save("later", later); act.textContent = "Cleared ✓"; }
+  }
+});
+$("#main").addEventListener("keydown", e => { if(e.key === "Enter"){ const c = e.target.closest(".card, .pick"); if(c) openVideo(c.dataset.id); } });
+$("#dLike").onclick = () => toggle(liked, "liked");
+$("#dLater").onclick = () => toggle(later, "later");
+$("#dClose").onclick = () => $("#dlg").close();
+$("#dlg").addEventListener("close", () => { $("#player").innerHTML = ""; render(); });
+$("#helpBtn").onclick = () => $("#help").showModal();
+$("#helpClose").onclick = () => $("#help").close();
+$("#repoLink").href = REPO_URL;
+
+render();
+</script>
+</body>
+</html>
